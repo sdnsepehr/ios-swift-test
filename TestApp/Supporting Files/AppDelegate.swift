@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,8 +15,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        Style.setupTheme(theme: .default_);
+        
+        window = UIWindow(frame: UIScreen.main.bounds);
+        let navigationController = ParentNavigationController(rootViewController:  NotesTableViewController())
+        window?.rootViewController = navigationController;
+        window?.makeKeyAndVisible();
+        
+        self.requestAuthorization { (_) in}
         return true
+    }
+    
+    private func requestAuthorization(completionHandler: @escaping (_ success: Bool) -> ()) {
+        // Request Authorization
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (success, error) in
+            if let error = error {
+                print("Request Authorization Failed (\(error), \(error.localizedDescription))")
+            }
+            
+            completionHandler(success)
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -34,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "updateAlertStatus"), object: nil);
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
