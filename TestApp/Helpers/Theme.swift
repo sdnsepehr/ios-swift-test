@@ -62,8 +62,8 @@ struct Style {
     
     private static func setupDefaultTheme(){
         // -------- Colors ----------------
-        mainColor = UIColor(r: 31, g: 71, b: 98);
-        differColor = UIColor(r: 245, g: 186, b: 52);
+        mainColor = UIColor(r: 60, g: 178, b: 239);
+        differColor = UIColor(r: 248, g: 97, b: 97);
         defaultTextColor = UIColor(r: 57, g: 65, b: 71);
         errorColorRed = UIColor(r: 255, g: 23, b: 51);
         grayColor = UIColor(r: 52, g: 60, b: 66);

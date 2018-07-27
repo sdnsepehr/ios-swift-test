@@ -92,39 +92,49 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
             
             fetchedResultsController?.delegate = self;
             try? fetchedResultsController?.performFetch();
-            tableView.reloadData();
+            self.updateTableView();
         }
     }
     
+    var selectedSegmentIndex = 0;
     @objc private func updateAlertsStatus() {
         if let context = container?.viewContext {
             let request: NSFetchRequest<Note> = Note.fetchRequest();
             let selector = #selector(NSString.caseInsensitiveCompare(_:));
             request.sortDescriptors = [NSSortDescriptor(key: "updatedDate", ascending: false, selector: selector)];
-            request.predicate = NSPredicate(format: "isDone == %@", NSNumber(value: self.statusSegment.selectedSegmentIndex != 0));
+            request.predicate = NSPredicate(format: "isDone == %@", NSNumber(value: selectedSegmentIndex != 0));
             fetchedResultsController = NSFetchedResultsController<Note>(
                 fetchRequest: request,
                 managedObjectContext: context,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
-            
+    
             fetchedResultsController?.delegate = self;
             try? fetchedResultsController?.performFetch();
-             tableView.reloadData();
+            DispatchQueue.main.async {
+                self.updateTableView();
+            }
             self.scheduleNotifications(notes: fetchedResultsController?.fetchedObjects);
         }
+    }
+    
+    private func updateTableView() {
+         self.tableView.reloadData();
+        self.checkIfEmpty();
     }
     
     private func checkIfEmpty(){
         if let context = container?.viewContext {    // context == main context on main thread
             context.perform {
                 let req: NSFetchRequest<Note> = Note.fetchRequest()
+                req.predicate = NSPredicate(format: "isDone == %@", NSNumber(value: self.statusSegment.selectedSegmentIndex != 0));
                 if let noteCount = (try? context.fetch(req))?.count {
                     if (noteCount > 0) {
                         self.tableView.backgroundView = nil;
                     } else {
-                        self.tableView.backgroundView = EmptyStateView(message: "There is no notes to show. Please tap + icon to add a new note".localized);
+                        let message = self.statusSegment.selectedSegmentIndex == 0 ? "There is no notes to show. Please tap + icon to add a new one.".localized : "There is no done notes to show. When you mark a note as done, it will appear here.".localized;
+                        self.tableView.backgroundView = EmptyStateView(message: message);
                     }
                 }
             }
@@ -171,6 +181,7 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
     // MARK: AlertDelegate
     
     func reloadNotes() {
+        self.selectedSegmentIndex = self.statusSegment.selectedSegmentIndex;
         self.updateAlertsStatus();
     }
     
@@ -210,6 +221,7 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
                 if let note = self.fetchedResultsController?.object(at: editActionsForRowAt) {
                     if let context = self.container?.viewContext {
                         note.delete(in: context);
+                        self.updateUI();
                     }
                 }
             })
@@ -239,7 +251,7 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        return true;
     }
 }
 
@@ -253,26 +265,26 @@ extension NotesTableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController?.sections, sections.count > 0 {
-            return sections[section].numberOfObjects
+            return sections[section].numberOfObjects;
         } else {
-            return 0
+            return 0;
         }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let sections = fetchedResultsController?.sections, sections.count > 0 {
-            return sections[section].name
+            return sections[section].name;
         } else {
-            return nil
+            return nil;
         }
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return fetchedResultsController?.sectionIndexTitles
+        return fetchedResultsController?.sectionIndexTitles;
     }
     
     override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        return fetchedResultsController?.section(forSectionIndexTitle: title, at: index) ?? 0
+        return fetchedResultsController?.section(forSectionIndexTitle: title, at: index) ?? 0;
     }
 }
 

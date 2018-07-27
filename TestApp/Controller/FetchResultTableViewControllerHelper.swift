@@ -38,6 +38,6 @@ class FetchedResultsTableViewController: UITableViewController, NSFetchedResults
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
+        tableView.endUpdates();
     }
 }

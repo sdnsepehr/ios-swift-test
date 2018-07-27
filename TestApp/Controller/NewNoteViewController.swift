@@ -42,7 +42,7 @@ class NewNoteViewController: UIViewController, TextEditingDelegate {
     
     lazy var alertSwitch: UISwitch = {
         let switch_ = UISwitch();
-        switch_.thumbTintColor = Style.differColor;
+        switch_.thumbTintColor = Style.lightGrayColor;
         switch_.onTintColor = Style.mainColor;
         switch_.addTarget(self, action: #selector(switchStateChanged), for: .valueChanged);
         switch_.isOn = false;
@@ -66,13 +66,6 @@ class NewNoteViewController: UIViewController, TextEditingDelegate {
         imageView.translatesAutoresizingMaskIntoConstraints = false;
         return imageView;
     }();
-    
-//    let notificationTitleBackgroundView: UIView = {
-//        let view = UIView();
-//        view.backgroundColor = Style.mainColor.withAlphaComponent(0.1);
-//        view.translatesAutoresizingMaskIntoConstraints = false;
-//        return view;
-//    }();
     
     let datePicker: UIDatePicker = {
         let picker = UIDatePicker();
