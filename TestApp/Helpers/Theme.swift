@@ -83,6 +83,5 @@ struct Style {
         smallerFont = UIFont.systemFont(ofSize: 13);
         smallFont = UIFont.systemFont(ofSize: 11);
         miniFont = UIFont.systemFont(ofSize: 9);
-       
     }
 }

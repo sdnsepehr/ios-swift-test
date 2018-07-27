@@ -121,8 +121,6 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
             context.perform {
                 let req: NSFetchRequest<Note> = Note.fetchRequest()
                 if let noteCount = (try? context.fetch(req))?.count {
-                    print("\(noteCount) Notes")
-                    
                     if (noteCount > 0) {
                         self.tableView.backgroundView = nil;
                     } else {
@@ -160,7 +158,6 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
         
         let timeInterval = note.alertDate!.timeIntervalSince(Date());
         let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false);
-        print("Time Interval: ", timeInterval);
         
         let notificationRequest = UNNotificationRequest(identifier: "sepehr-not-\(Int(timeInterval))" , content: notificationContent, trigger: notificationTrigger);
     
@@ -196,6 +193,14 @@ class NotesTableViewController: FetchedResultsTableViewController, AlertDelegate
             }
         }
         return 70;
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let note = fetchedResultsController?.object(at: indexPath) {
+            let noteDetailsController = NoteDetailsViewController();
+            noteDetailsController.note = note;
+            self.navigationController?.pushViewController(noteDetailsController, animated: true);
+        }
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]?{

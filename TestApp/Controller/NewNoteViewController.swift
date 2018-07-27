@@ -90,7 +90,6 @@ class NewNoteViewController: UIViewController, TextEditingDelegate {
     
     var doneBarButton: UIBarButtonItem?
     
-    
     let colors = [Style.lightGrayColor, Style.blueColor, Style.greenColor, Style.orangeColor, Style.yellowColor];
     
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
@@ -117,6 +116,7 @@ class NewNoteViewController: UIViewController, TextEditingDelegate {
         
         self.navigationItem.leftBarButtonItem = cancelBarButton;
         self.navigationItem.rightBarButtonItem = doneBarButton;
+        self.titleTextFeild.firstResponder = true;
         
         for (i, color) in colors.enumerated() {
             addViewToStackWith(tag: i, color: color!);
@@ -144,7 +144,6 @@ class NewNoteViewController: UIViewController, TextEditingDelegate {
     }
     
     @objc private func colorButtonTapp(_ button: UIButton) {
-        print("Tapped, ", button.tag);
             self.deselectColorButton(self.selectedColorButton);
             self.selectColorButton(button);
     }
@@ -154,7 +153,6 @@ class NewNoteViewController: UIViewController, TextEditingDelegate {
         button.layer.borderWidth = 1;
         button.layer.borderColor = Style.mainColor.withAlphaComponent(0.5).cgColor;
         self.selectedColorButton = button;
-        print("Selected color index is: ", button.tag);
         self.selectedColor = colors[button.tag]!;
     }
     

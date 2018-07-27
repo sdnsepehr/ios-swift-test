@@ -46,9 +46,17 @@ class Note: NSManagedObject {
         appDelegate.saveContext();
     }
     
+    func updateDetails(updatedDetails: String) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate;
+        self.details = updatedDetails;
+        appDelegate.saveContext();
+    }
+    
     func setDone() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate;
         self.isDone = true;
+        self.isAlertOn = false;
+        self.alertDate = nil;
         appDelegate.saveContext();
     }
     

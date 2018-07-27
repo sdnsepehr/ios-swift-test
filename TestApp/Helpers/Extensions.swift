@@ -72,6 +72,9 @@ extension UIColor {
 }
 
 extension String {
+    
+    // When we decided to add localizations, we only need to call localized on any String and it will find the matched localized string and return.
+    
     var localized: String {
         var result: String
         let languageCode = Locale.preferredLanguage;

@@ -17,5 +17,6 @@ class ParentNavigationController: UINavigationController {
         self.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: Style.mainColor, NSAttributedStringKey.font: Style.normalFont];
         self.navigationBar.tintColor = Style.mainColor;
         UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: Style.mainColor], for: .normal);
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffsetMake(-1000, 0), for:UIBarMetrics.default)
     }
 }

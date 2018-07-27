@@ -38,7 +38,6 @@ struct LanguageManager {
         }
         
         set {
-            print("current language: ", currentLanguage.rawValue);
             
             switch currentLanguage {
             case .english:
